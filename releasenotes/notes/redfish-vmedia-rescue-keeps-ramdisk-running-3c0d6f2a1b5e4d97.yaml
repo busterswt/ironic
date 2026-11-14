@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    Fixes rescue with the ``redfish-virtual-media`` boot interface: finishing
+    a rescue no longer powers the node off, which killed the rescue ramdisk
+    and left the node in ``rescue`` with nothing running. The virtual media
+    stays inserted until unrescue, which powers the node off and ejects it.
+    A failed, aborted or timed-out rescue still powers off and ejects.

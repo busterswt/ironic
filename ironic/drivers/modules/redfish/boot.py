@@ -1177,6 +1177,15 @@ class RedfishVirtualMediaBoot(base.BootInterface):
                       'any devices', task.node.uuid)
             return
 
+        if (task.node.provision_state == states.RESCUING
+                and task.node.power_state != states.POWER_OFF):
+            # NOTE(manti): finishing a rescue: the rescue ramdisk keeps
+            # running, so neither power off nor eject under it (bug
+            # 2160374). Unrescue powers off and ejects.
+            LOG.debug('Node %s is entering rescue, keeping it powered on '
+                      'with its virtual media', task.node.uuid)
+            return
+
         LOG.debug("Cleaning up deploy boot for "
                   "%(node)s", {'node': task.node.uuid})
         manager_utils.node_power_action(task, states.POWER_OFF)
